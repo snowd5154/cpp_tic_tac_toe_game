@@ -1,0 +1,137 @@
+#include<iostream>
+using namespace std;
+
+class ticTacToe {
+
+public:
+
+	ticTacToe();
+	void initialize();
+	void printBoard();
+	bool determineWinner();
+	void getMove();
+	bool validateMove();
+
+	void play();
+
+private:
+
+	char g[3][3];
+	int count;
+	int row, col;
+
+};
+
+ticTacToe::ticTacToe()
+{
+	initialize();
+}
+void ticTacToe::initialize()
+{
+
+	count = 0;
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			g[i][j] = '*';
+
+}// end function initialization
+void ticTacToe::printBoard()
+{
+
+	cout << "\n\n";
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+			cout << " " << g[i][j];
+
+		cout << "\n\n";
+	}// end for
+}// end function printBoard
+
+void ticTacToe::getMove() {
+	//prompt and read the input from the user
+	cout << "\n\n\tPlayer" << ((count % 2) + 1) << "\n\tEnter row: ";
+	cin >> row;
+
+	cout << "\tEnter column: ";
+	cin >> col;
+}// end function getMove
+
+bool ticTacToe::validateMove() {
+	// check for valid positions
+	if ((1 > row || row > 3) || (1 > col || col > 3) || (g[row - 1][col - 1] != '*'))
+	{
+		cout << "\n\tInvalid Entry. ";
+		return false;
+	}
+
+	return true;
+
+}// end function validateMove
+
+bool ticTacToe::determineWinner()
+{
+	char ch;
+
+	//initialize the player's symbol
+	if (count % 2 == 0)
+		ch = 'X';
+	else ch = '0';
+
+	// place the player's symbol in the position
+	if (validateMove())
+	{
+		g[row - 1][col - 1] = ch;
+		count++;
+	}
+	//check for win
+	//check for row
+	if((g[0][0] == ch && g[0][1] == ch && g[0][2] == ch) || 
+		((g[1][0] == ch && g[1][1] == ch && g[1][2] == ch)) || 
+		((g[2][0] == ch && g[2][1] == ch && g[2][2] == ch)) ||
+
+		//check for column
+		((g[0][0] == ch && g[1][0] == ch && g[2][0] == ch)) || 
+		((g[0][1] == ch && g[1][1] == ch && g[2][1] == ch)) || 
+		((g[0][2] == ch && g[1][2] == ch && g[2][2] == ch)) ||
+
+		//check diagonal elements
+		((g[0][0] == ch && g[1][1] == ch && g[2][2] == ch)) || 
+		((g[0][2] == ch && g[1][1] == ch && g[2][0] == ch)))
+
+		return true;
+	else if (count == 9) {
+		printBoard();
+		cout << "\n\n\tRe-initializing the game.";
+		initialize();
+	}
+	return false;
+}// end function determineWinner
+
+void ticTacToe::play() {
+	initialize();
+	do {
+		getMove();
+		if (determineWinner()) {
+			cout << "\n\n\tPlayer" << (count % 2) << " Won the game.";
+			cout << "\n\n";
+			break;
+		}
+		else
+			printBoard();
+	} while (true);
+}
+//function main begins program execution
+int main() {
+
+	ticTacToe t;
+	// let the user know about the program
+	cout << "\n\n\t\t\tTic-Tac-Toe game";
+
+	//play the game of tic tac toe
+	t.play();
+	return 0;
+	//indicates program executed successfully
+
+}//end function, main
